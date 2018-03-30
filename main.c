@@ -29,10 +29,12 @@ void iterate(double *old, double **new, double **m, double *b, int n){
 	double sumNew = 0, sumOld = 0;
 
 	for(int i=0; i<n; i++){
+		sumNew=0; sumOld=0;
 		for(int j=0; j<i; j++) sumNew += m[i][j]*(*new[j]);
 		for(int j=i; j<n; j++) sumOld += m[i][j]*(old[j]);
+		printf("-->%lf\n", sumOld);
 		*new[i] = (b[i] - sumNew - sumOld)/m[i][i];
-		printf("%lf ", *new[i]);
+		printf("%lf\n", *new[i]);
 	}
 }
 
