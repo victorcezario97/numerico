@@ -91,31 +91,14 @@ double *generateB(int n, double **m){
 	return b;
 }
 
-//Função que retorna o maior componente de um vetor
-double maxVector(double *x, int n){
-	int i;
-	double max = x[0];
-
-	for(i = 1; i < n; i++){
-		if(x[i] > max)
-			max = fabs(x[i]);
-	}
-
-	return max;
-}
-
 // Calcula o erro da iteração
 double erro(double *x1, double *x2, int n){
 	double erro, *aux, maxNum, maxDen;
-	int i;
 
-	aux = (double*)malloc(n*sizeof(double));
+	aux = subtractVector(x1, x2, n);
 
-	for(i = 0; i < n; i++) 
-		aux[i] = fabs(x1[i] - x2[i]);
-
-	maxNum = maxVector(aux, n);
-	maxDen = maxVector(x1, n);
+	maxNum = norm(aux, n);
+	maxDen = norm(x1, n);
 	erro = maxNum / maxDen;
 
 	free(aux);
