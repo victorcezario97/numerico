@@ -1,0 +1,15 @@
+./main
+Digite 0 para utilizar a matriz definida pelas equacoes de I ou qualquer outro numero para digitar a matriz manualmente:
+Dimensao da matriz: Digite os elementos da linha 1, separedos por ENTER:
+Digite os elementos da linha 2, separedos por ENTER:
+Digite os elementos da linha 3, separedos por ENTER:
+Digite 0 para exibir a matriz ou qualquer outro numero para continuar: 1.000000 0.200000 0.100000 
+0.200000 1.000000 0.200000 
+0.200000 0.300000 1.000000 
+Digite 0 para utilizar o vetor b definido pela soma das linhas de A ou qualquer outro numero para digitar a matriz manualmente:
+Elementos do vetor b:
+Constante real: Numero maximo de iteracoes: 
+Numero de iteracoes: 10
+1.000003
+-2.000000
+0.999999
