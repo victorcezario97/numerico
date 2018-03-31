@@ -3,4 +3,5 @@ all:
 run:
 	./main
 clean:
-	rm main
+	rm main -rf
+	rm *.out -rf

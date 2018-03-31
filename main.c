@@ -78,6 +78,19 @@ double **generateMatrix(int n){
 	return m;
 }
 
+double *generateB(int n, double **m){
+	double *b = (double*) malloc(n*sizeof(double));
+
+	for(int i=0; i<n; i++){
+		b[i] = 0;
+		for(int j=0; j<n; j++){
+			b[i] += m[i][j];
+		}
+	}
+
+	return b;
+}
+
 int main(int argc, char *argv[]){
 
 	int n, itmax, it, op;
@@ -93,12 +106,20 @@ int main(int argc, char *argv[]){
 	if(op == 0) m = generateMatrix(n);
 	else m = readMatrix(n);
 
-	printMatrix(m, n);
+	printf("Digite 0 para exibir a matriz ou qualquer outro numero para continuar: ");
+	scanf("%d", &op);
+	if(op == 0)	printMatrix(m, n);
 
-	b = (double*)malloc(n*sizeof(double));
-	printf("Elementos do vetor b:\n");
-	for(int i=0; i<n; i++){
-		scanf("%lf", &b[i]);
+	printf("Digite 0 para utilizar o vetor b definido pela soma das linhas de A ou qualquer outro numero para digitar a matriz manualmente:\n");
+	scanf("%d", &op);
+
+	if(op == 0) b = generateB(n, m);
+	else{ 
+		b = (double*)malloc(n*sizeof(double));
+		printf("Elementos do vetor b:\n");
+		for(int i=0; i<n; i++){
+			scanf("%lf", &b[i]);
+		}
 	}
 
 	printf("Constante real: ");

@@ -4,5 +4,6 @@ Intruções de uso:
 		-lm: flag para utilizar a biblioteca math.h
 
 	make run: roda o programa
+	make run<x.in: roda o programa com algum dos casos de teste(x = 1, 2, b50, b100 ou T)
 
-	make clean: apaga o executável
+	make clean: apaga o executável e arquivos .out
