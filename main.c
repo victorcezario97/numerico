@@ -60,15 +60,38 @@ double norm(double *v, int n){
 	return max;
 }
 
+double **generateMatrix(int n){
+	double **m = (double**)malloc(n*sizeof(double*));
+	for(int i=0; i<n; i++) m[i] = (double*)malloc(n*sizeof(double));
+
+	for(int i=0; i<n; i++){
+		for(int j=0; j<n; j++){
+			if(i==j) m[i][j] = 4;
+			else if(j == i+1) m[i][j] = -1;
+			else if(i == j+1) m[i][j] = -1;
+			else if(j == i+3) m[i][j] = -1;
+			else if(i == j+3) m[i][j] = -1;
+			else m[i][j] = 0;
+		}
+	}
+
+	return m;
+}
+
 int main(int argc, char *argv[]){
 
-	int n, itmax, it;
+	int n, itmax, it, op;
 	double **m, *b, e, *x1, *x2, max, *sub;
+
+	printf("Digite 0 para utilizar a matriz definida pelas equacoes de I ou qualquer outro numero para digitar a matriz manualmente:\n");
+	scanf("%d", &op);
 
 	//Lendo os valores necessarios
 	printf("Dimensao da matriz: ");
 	scanf("%d", &n);
-	m = readMatrix(n);
+	
+	if(op == 0) m = generateMatrix(n);
+	else m = readMatrix(n);
 
 	printMatrix(m, n);
 
