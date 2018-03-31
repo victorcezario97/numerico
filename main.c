@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+//Funcao que le uma matriz de dimensao n da entrada padrao
 double **readMatrix(int n){
 	double **m = (double**)malloc(n * sizeof(double*));
 
@@ -17,6 +18,7 @@ double **readMatrix(int n){
 	return m;
 }
 
+//Funcao que imprime uma matriz de dimensao n
 void printMatrix(double **m, int n){
 	for(int i=0; i<n; i++){
 		for(int j=0; j<n; j++){
@@ -26,19 +28,21 @@ void printMatrix(double **m, int n){
 	}
 }
 
+//Funcao que realiza uma iteracao do metodo
 void iterate(double *old, double **new, double **m, double *b, int n){
 	double sumNew = 0, sumOld = 0;
 
 	for(int i=0; i<n; i++){
 		sumNew=0; sumOld=0;
+		//Calculando a soma dos valores do vetor X(k+1)
 		for(int j=0; j<i; j++) sumNew += m[i][j]*((*new)[j]);
-		for(int j=i; j<n; j++) sumOld += m[i][j]*(old[j]);
-		printf("sumNew: %lf\tsumOld: %lf\n", sumNew, sumOld);
+		//Calculando a soma dos valores do vetor X(k)
+		for(int j=i+1; j<n; j++) sumOld += m[i][j]*(old[j]);
 		(*new)[i] = (b[i] - sumNew - sumOld)/m[i][i];
-		//printf("-->%lf\n", (*new)[i]);
 	}
 }
 
+//Funcao que subtrai dois vetores de dimensao n elemento por elemento
 double *subtractVector(double *v1, double *v2, int n){
 	double *sub = (double*)malloc(n*sizeof(double));
 
@@ -47,6 +51,7 @@ double *subtractVector(double *v1, double *v2, int n){
 	return sub;
 }
 
+//Funcao que retorna a norma infinita de um vetor de dimensao n
 double norm(double *v, int n){
 	double max = v[0];
 
@@ -57,9 +62,10 @@ double norm(double *v, int n){
 
 int main(int argc, char *argv[]){
 
-	int n, itmax;
+	int n, itmax, it;
 	double **m, *b, e, *x1, *x2, max, *sub;
 
+	//Lendo os valores necessarios
 	printf("Dimensao da matriz: ");
 	scanf("%d", &n);
 	m = readMatrix(n);
@@ -75,32 +81,57 @@ int main(int argc, char *argv[]){
 	printf("Constante real: ");
 	scanf("%lf", &e);
 
-	printf("\"itmax\": ");
+	printf("Numero maximo de iteracoes: ");
 	scanf("%d", &itmax);
+	it = itmax;
 
+	//Alocando os vetores que serao usados nas iteracoes
 	x1 = (double*)malloc(n*sizeof(double));
 	x2 = (double*)malloc(n*sizeof(double));
 
+	//Preenchendo o vetor inicial
 	for(int i=0; i<n; i++) x1[i] = 0;
 
-	for(int i=0; i<itmax; i+=2){
+	for(int i=1; i*2<=itmax; i+=2){
+		//Uma iteracao calcula o novo vetor X(k+1) e armazena ele em x2 usando o vetor anterior x1(X(k))
 		iterate(x1, &x2, m, b, n);
+
+		//Verificando se a norma infinita da diferenca de X(k) e X(k+1) é menor do que a constante real 'e'
 		sub = subtractVector(x1, x2, n);
 		max = norm(sub, n);
+		free(sub);
 		if(max <= e){
-			printf("Broke 1: %lf\n", max);
+			it = i*2-1;
 			break;
 		}
+
+		//Verificando se o numero maximo de iteracoes foi alcancado
+		if(i*2 > itmax) break;
+
+		//Uma iteracao calcula o novo vetor X(k+1) e armazena ele em x1 usando o vetor anterior x2(X(k))
 		iterate(x2, &x1, m, b, n);
-		for(int j=0; j<n; j++) printf("%lf ", x1[j]);
-		max = norm(subtractVector(x1, x2, n), n);
+
+		//Verificando se a norma infinita da diferenca de X(k) e X(k+1) é menor do que a constante real 'e'
+		sub = subtractVector(x1, x2, n);
+		max = norm(sub, n);
+		free(sub);
 		if(max <= e){
-			printf("Broke 2\n");
+			it = i*2;
 			break;
 		}
 	}
 
-	//for(int i=0; i<n; i++) printf("%lf\n", x1[i]);
+	//Imprimindo resultados
+	printf("\nNumero de iteracoes: %d\n", it);
+	for(int i=0; i<n; i++) printf("%lf\n", x1[i]);
+
+	//Liberando alocacoes
+	for(int i=0; i<n; i++) free(m[i]);
+	free(m);
+
+	free(b);
+	free(x1);
+	free(x2);
 
 	return 0;
 }
