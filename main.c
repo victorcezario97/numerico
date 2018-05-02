@@ -108,7 +108,7 @@ double erro(double *x1, double *x2, int n){
 
 int main(int argc, char *argv[]){
 	int n, itmax, it, op;
-	double **m, *b, e, *x1, *x2, max, *sub, calcErro;
+	double **m, *b, e, *x1, *x2, max, *sub, calcErro = 0;
 
 	printf("Digite 0 para utilizar a matriz definida pelas equacoes de I ou qualquer outro numero para digitar a matriz manualmente:\n");
 	scanf("%d", &op);
@@ -177,10 +177,11 @@ int main(int argc, char *argv[]){
 			it = i*2;
 			break;
 		}
+
+		// Cálculo do erro
+		calcErro += erro(x1, x2, n);
 	}
 
-	// Cálculo do erro
-	calcErro = erro(x1, x2, n);
 
 	//Imprimindo resultados
 	printf("\nNumero de iteracoes: %d\n", it);
