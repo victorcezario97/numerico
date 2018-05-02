@@ -60,6 +60,7 @@ double norm(double *v, int n){
 	return max;
 }
 
+// Retorna uma matriz de dimensao n definida pelas equacoes de I
 double **generateMatrix(int n){
 	double **m = (double**)malloc(n*sizeof(double*));
 	for(int i=0; i<n; i++) m[i] = (double*)malloc(n*sizeof(double));
@@ -74,10 +75,10 @@ double **generateMatrix(int n){
 			else m[i][j] = 0;
 		}
 	}
-
 	return m;
 }
 
+// Retorna um vetor de dimensao n definido pela funcao dada no item b)
 double *generateB(int n, double **m){
 	double *b = (double*) malloc(n*sizeof(double));
 
@@ -87,14 +88,44 @@ double *generateB(int n, double **m){
 			b[i] += m[i][j];
 		}
 	}
-
 	return b;
 }
 
-int main(int argc, char *argv[]){
+//Função que retorna o maior componente de um vetor
+double maxVector(double *x, int n){
+	int i;
+	double max = x[0];
 
+	for(i = 1; i < n; i++){
+		if(x[i] > max)
+			max = fabs(x[i]);
+	}
+
+	return max;
+}
+
+// Calcula o erro da iteração
+double erro(double *x1, double *x2, int n){
+	double erro, *aux, maxNum, maxDen;
+	int i;
+
+	aux = (double*)malloc(n*sizeof(double));
+
+	for(i = 0; i < n; i++) 
+		aux[i] = fabs(x1[i] - x2[i]);
+
+	maxNum = maxVector(aux, n);
+	maxDen = maxVector(x1, n);
+	erro = maxNum / maxDen;
+
+	free(aux);
+
+	return erro;
+}
+
+int main(int argc, char *argv[]){
 	int n, itmax, it, op;
-	double **m, *b, e, *x1, *x2, max, *sub;
+	double **m, *b, e, *x1, *x2, max, *sub, calcErro;
 
 	printf("Digite 0 para utilizar a matriz definida pelas equacoes de I ou qualquer outro numero para digitar a matriz manualmente:\n");
 	scanf("%d", &op);
@@ -165,9 +196,13 @@ int main(int argc, char *argv[]){
 		}
 	}
 
+	// Cálculo do erro
+	calcErro = erro(x1, x2, n);
+
 	//Imprimindo resultados
 	printf("\nNumero de iteracoes: %d\n", it);
 	for(int i=0; i<n; i++) printf("%lf\n", x1[i]);
+	printf("Erro = %lf\n", calcErro);
 
 	//Liberando alocacoes
 	for(int i=0; i<n; i++) free(m[i]);
